@@ -13,5 +13,6 @@ cursor = conn.cursor()
 def store_message(sender, user_id, user_name, message):
 
     query = "INSERT INTO {sender} (user_id, name, time, text) VALUES ({id}, {name}, NOW();, {text})".format(sender = sender, id = user_id, name = user_name, text = message)
+    print(query)
     cursor.execute(query)
     conn.commit()
