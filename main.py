@@ -39,6 +39,9 @@ async def callback(request: Request):
         handler.handle(body_text, signature)
     except InvalidSignatureError:
         raise HTTPException(status_code=400, detail="Invalid signature")
+    except Exception as e:
+        print(f"Error: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
     
     return "OK"
 
