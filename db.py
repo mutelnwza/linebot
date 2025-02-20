@@ -30,7 +30,7 @@ def store_message(sender, user_id, user_name, message):
 
 def store_user_data(user_id, user_name):
     try:
-        query = "INSERT INTO user_info (userid, name, time_added) VALUES ('{id}', {name}, NOW()) ON CONFLICT (userid) DO NOTHING;".format(id=user_id, name=user_name)
+        query = "INSERT INTO user_info (userid, name, time_added) VALUES ('{id}', '{name}', NOW()) ON CONFLICT (userid) DO NOTHING;".format(id=user_id, name=user_name)
         print(query)
         cursor.execute(query)
         conn.commit()
