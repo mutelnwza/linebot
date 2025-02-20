@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request, HTTPException
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageSendMessage
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageSendMessage, FollowEvent
 
 import os
 import db
@@ -48,16 +48,17 @@ async def callback(request: Request):
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    user_id = event.source.user_id # get user id
-    name = line_bot_api.get_profile(user_id).display_name
+    user_id, name = getInfo(event)
     user_message = event.message.text.lower()
 
     # send image to user
-    if user_message == "send img":
-        db.store_message("user_db", user_id, name, user_message)
-        img_url = 'https://i.ibb.co/xcKgTxY/cheems.png'
+    if user_message == "history":
+        return
+    
+    elif user_message == "send img":
+        reply = 'https://i.ibb.co/xcKgTxY/cheems.png'
         line_bot_api.reply_message(
-            event.reply_token, ImageSendMessage(original_content_url=img_url, preview_image_url=img_url)
+            event.reply_token, ImageSendMessage(original_content_url=reply, preview_image_url=reply)
         )
     # text
     else:
@@ -65,3 +66,17 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,TextSendMessage(text=reply)
         )
+    
+    db.store_message("user", user_id, name, user_message)
+    db.store_message("bot",user_id, name, reply)
+
+
+# When user adds the bot
+@handler.add(FollowEvent)
+def follow(event):
+    user_id, name = getInfo(event)
+    db.store_user_data(user_id, name) #store data of the user
+
+
+def getInfo(event):
+    return event.source.user_id, line_bot_api.get_profile(event.source.user_id).display_name
