@@ -5,7 +5,7 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
 
 import os
-import db, menu
+import db, payload
 
 import just_checking
 
@@ -34,7 +34,7 @@ if not ACCESS_TOKEN or not CHANNEL_SECRET:
 
 line_bot_api = LineBotApi(ACCESS_TOKEN)
 handler = WebhookHandler(CHANNEL_SECRET)
-menu_text, menu_carousel = menu.show_menu()
+menu_text, menu_carousel = payload.show_menu()
 
 
 # Webhook endpoint
@@ -68,19 +68,27 @@ async def webhook(request: Request):
     reply_token = req["originalDetectIntentRequest"]["payload"]["data"]["replyToken"]
     user_message = req["queryResult"]["queryText"].strip()
 
+
     # Menu recommendation
     if intent_name == "Menu Recommendation":
         line_bot_api.reply_message(reply_token, [menu_text, menu_carousel]) #send the menu
         return {"fulfillmentText": "Showing menu"}
 
+    # Food Order
+    elif intent_name == "Order":
+        if user_id not in user_sessions:
+            user_sessions[user_id] = []
 
-    if user_message == "cancel":
-        if user_id in user_sessions:
-            del user_sessions[user_id]  # Clear session
-            send_message(reply_token, "Your order has been canceled. Let me know if you need anything else! 😊")
-        else:
-            send_message(reply_token, "You don't have an active order to cancel.")
-        return {"fulfillmentText": "Order canceled."}
+        for i in range(len(req["queryResult"]["parameters"]["food"])):
+            order = req["queryResult"]["parameters"]["food"][i]
+            amount = int(req["queryResult"]["parameters"]["amount"][i])
+
+            user_sessions[user_id].append({"order":order, "amount":amount})
+
+        order_sum, reply = payload.show_confirm(user_sessions, user_id)
+        line_bot_api.reply_message(reply_token, [order_sum,reply])
+
+        return {"fulfillmentText": "Order added"}
 
 
 # Handle text messages
@@ -97,8 +105,8 @@ def handle_message(event):
     # text
     else:
         reply = f"You said: {user_message}"
-        send_message(
-            event.reply_token,reply)
+        line_bot_api.reply_message(
+            event.reply_token,TextSendMessage(text=reply))
     
     # db.store_message("user", user_id, name, user_message)
     # db.store_message("bot",user_id, name, reply)
@@ -109,10 +117,6 @@ def handle_message(event):
 def follow(event):
     user_id, name = getInfo(event)
     db.store_user_data(user_id, name) #store data of the user
-
-
-async def send_message(reply_token, text):
-    line_bot_api.reply_message(reply_token, TextSendMessage(text=text))
 
 
 def getInfo(event):

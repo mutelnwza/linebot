@@ -1,4 +1,4 @@
-from linebot.models import TextSendMessage, TemplateSendMessage, CarouselTemplate, CarouselColumn, MessageAction
+from linebot.models import TextSendMessage, TemplateSendMessage, ConfirmTemplate, CarouselTemplate, CarouselColumn, MessageAction
 
 def show_menu():
     text = TextSendMessage(text = "วันนี้มีเมนูพิเศษค่ะ! 🍽️ \n🥩 สเต็กเนื้อวากิว ซอสพริกไทยดำ\n🍜 ก๋วยเตี๋ยวต้มยำกุ้งแม่น้ำ \n🍰 ชีสเค้กมะม่วง เมนูของหวานสุดฮิต! \n\nสนใจลองเมนูไหนเป็นพิเศษไหมคะ? 😊")
@@ -27,3 +27,19 @@ def show_menu():
         ])
     )
     return text, carousel_template
+
+
+def show_confirm(user_sessions, user_id):
+
+    order_sum = TextSendMessage(text = "ออเดอร์ของคุณคือ \n"+"\n".join([f"{item['order']} จำนวน {item['amount']}" for item in user_sessions[user_id]]))
+    
+    confirm_template = TemplateSendMessage(
+        alt_text="Order Confirmation",
+        template= ConfirmTemplate
+        (
+            text = "คลิกเพื่อยืนยันหรือยกเลิกคำสั่งซื้อ",
+            actions=[MessageAction(label="ยืนยัน", text="ยืนยันออเดอร์"), MessageAction(label="ยกเลิก", text="ยกเลิก")]
+        )
+    )
+    
+    return order_sum, confirm_template
