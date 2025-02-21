@@ -1,0 +1,93 @@
+{
+    "responseId": "a6dca6dd-5392-43f1-a2dd-6acbf3e95952-d25acdef",
+    "queryResult": {
+        "queryText": "ใช่",
+        "action": "Order.Order-yes",
+        "parameters": {},
+        "allRequiredParamsPresent": true,
+        "fulfillmentText": "รับทราบค่ะ กรุณาระบุชื่อ และเบอร์โทรศัพท์ ( เช่น A 0987654321)",
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [
+                        "รับทราบค่ะ กรุณาระบุชื่อ และเบอร์โทรศัพท์ ( เช่น A 0987654321)"
+                    ]
+                }
+            }
+        ],
+        "outputContexts": [
+            {
+                "name": "projects/a-typical-bot-gjcs/agent/sessions/32bed375-de15-3a93-a296-de0df33bc64f/contexts/order-yes-followup",
+                "lifespanCount": 2
+            },
+            {
+                "name": "projects/a-typical-bot-gjcs/agent/sessions/32bed375-de15-3a93-a296-de0df33bc64f/contexts/order-followup",
+                "lifespanCount": 1,
+                "parameters": {
+                    "food": [
+                        "สเต็กเนื้อวากิว ซอสพริกไทยดำ"
+                    ],
+                    "food.original": [
+                        "สเต็กเนื้อวากิวซอสพริกไทยดำ"
+                    ],
+                    "amount": [
+                        2.0
+                    ],
+                    "amount.original": [
+                        "2"
+                    ]
+                }
+            },
+            {
+                "name": "projects/a-typical-bot-gjcs/agent/sessions/32bed375-de15-3a93-a296-de0df33bc64f/contexts/menurecommendation-followup",
+                "parameters": {
+                    "food": [
+                        "สเต็กเนื้อวากิว ซอสพริกไทยดำ"
+                    ],
+                    "food.original": [
+                        "สเต็กเนื้อวากิวซอสพริกไทยดำ"
+                    ],
+                    "amount": [
+                        2.0
+                    ],
+                    "amount.original": [
+                        "2"
+                    ]
+                }
+            },
+            {
+                "name": "projects/a-typical-bot-gjcs/agent/sessions/32bed375-de15-3a93-a296-de0df33bc64f/contexts/__system_counters__",
+                "parameters": {
+                    "no-input": 0.0,
+                    "no-match": 0.0
+                }
+            }
+        ],
+        "intent": {
+            "name": "projects/a-typical-bot-gjcs/agent/intents/ada00391-bca0-4f6c-b9f3-0806a80aeb29",
+            "displayName": "Order - yes"
+        },
+        "intentDetectionConfidence": 1.0,
+        "languageCode": "th"
+    },
+    "originalDetectIntentRequest": {
+        "source": "line",
+        "payload": {
+            "data": {
+                "replyToken": "54ffc82d3d3741858da1985e96de49fe",
+                "timestamp": "1740110570269",
+                "type": "message",
+                "source": {
+                    "type": "user",
+                    "userId": "Ue9adc11b507d5d89f77f2a542ae907cf"
+                },
+                "message": {
+                    "id": "549083494236815473",
+                    "type": "text",
+                    "text": "ใช่"
+                }
+            }
+        }
+    },
+    "session": "projects/a-typical-bot-gjcs/agent/sessions/32bed375-de15-3a93-a296-de0df33bc64f"
+}

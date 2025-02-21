@@ -1,10 +1,13 @@
 from fastapi import FastAPI, Request, HTTPException
+from pydantic import BaseModel
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageSendMessage, FollowEvent
+from linebot.models import *
 
 import os
-import db
+import db, menu
+
+import just_checking
 
 from dotenv import load_dotenv
 
@@ -16,6 +19,13 @@ app = FastAPI()
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 CHANNEL_SECRET = os.getenv("CHANNEL_SECRET")
 
+user_sessions = {}
+
+class WebhookRequest(BaseModel):
+    responseId: str
+    queryResult: dict
+    originalDetectIntentRequest: dict
+
 print(f"LINE_CHANNEL_ACCESS_TOKEN: {ACCESS_TOKEN}")
 print(f"LINE_CHANNEL_SECRET: {CHANNEL_SECRET}")
 
@@ -24,7 +34,7 @@ if not ACCESS_TOKEN or not CHANNEL_SECRET:
 
 line_bot_api = LineBotApi(ACCESS_TOKEN)
 handler = WebhookHandler(CHANNEL_SECRET)
-
+menu_text, menu_carousel = menu.show_menu()
 
 
 # Webhook endpoint
@@ -45,17 +55,41 @@ async def callback(request: Request):
     
     return "OK"
 
+
+@app.post("/webhook")
+async def webhook(request: Request):
+    req = await request.json()
+
+    just_checking.formatjson(req) # เอาออกมาดูเฉยๆ
+
+    intent_name = req["queryResult"]["intent"]["displayName"]
+    
+    user_id = req["originalDetectIntentRequest"]["payload"]["data"]["source"]["userId"]
+    reply_token = req["originalDetectIntentRequest"]["payload"]["data"]["replyToken"]
+    user_message = req["queryResult"]["queryText"].strip()
+
+    # Menu recommendation
+    if intent_name == "Menu Recommendation":
+        line_bot_api.reply_message(reply_token, [menu_text, menu_carousel]) #send the menu
+        return {"fulfillmentText": "Showing menu"}
+
+
+    if user_message == "cancel":
+        if user_id in user_sessions:
+            del user_sessions[user_id]  # Clear session
+            send_message(reply_token, "Your order has been canceled. Let me know if you need anything else! 😊")
+        else:
+            send_message(reply_token, "You don't have an active order to cancel.")
+        return {"fulfillmentText": "Order canceled."}
+
+
 # Handle text messages
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     user_id, name = getInfo(event)
     user_message = event.message.text.lower()
 
-    # send image to user
-    if user_message == "history":
-        return
-    
-    elif user_message == "send img":
+    if user_message == "send img":
         reply = 'https://i.ibb.co/xcKgTxY/cheems.png'
         line_bot_api.reply_message(
             event.reply_token, ImageSendMessage(original_content_url=reply, preview_image_url=reply)
@@ -63,12 +97,11 @@ def handle_message(event):
     # text
     else:
         reply = f"You said: {user_message}"
-        line_bot_api.reply_message(
-            event.reply_token,TextSendMessage(text=reply)
-        )
+        send_message(
+            event.reply_token,reply)
     
-    db.store_message("user", user_id, name, user_message)
-    db.store_message("bot",user_id, name, reply)
+    # db.store_message("user", user_id, name, user_message)
+    # db.store_message("bot",user_id, name, reply)
 
 
 # When user adds the bot
@@ -76,6 +109,10 @@ def handle_message(event):
 def follow(event):
     user_id, name = getInfo(event)
     db.store_user_data(user_id, name) #store data of the user
+
+
+async def send_message(reply_token, text):
+    line_bot_api.reply_message(reply_token, TextSendMessage(text=text))
 
 
 def getInfo(event):
