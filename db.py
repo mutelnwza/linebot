@@ -26,7 +26,7 @@ def store_message(sender, user_id, user_name, message):
     except Exception as e:
         print(f"Error: {e}")
         raise HTTPException(status_code=500, detail="Database operation error")
-    
+
 
 def store_user_data(user_id, user_name):
     try:

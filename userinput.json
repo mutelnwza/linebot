@@ -1,70 +1,25 @@
 {
-    "responseId": "1927becd-11e6-44f8-8621-a5b90a46a584-d25acdef",
+    "responseId": "94648ca0-6d51-48f8-8b11-99598f4c8f9a-d25acdef",
     "queryResult": {
-        "queryText": "ก๋วยเตี๋ยวต้มยำกุ้งแม่น้ำ 1 ชีสเค้กมะม่วง 1",
-        "action": "MenuRecommendation.MenuRecommendation-custom",
-        "parameters": {
-            "food": [
-                "ก๋วยเตี๋ยวต้มยำกุ้งแม่น้ำ",
-                "ชีสเค้กมะม่วง"
-            ],
-            "amount": [
-                1.0,
-                1.0
-            ]
-        },
+        "queryText": "เมนู",
+        "parameters": {},
         "allRequiredParamsPresent": true,
         "outputContexts": [
             {
-                "name": "projects/a-typical-bot-gjcs/agent/sessions/32bed375-de15-3a93-a296-de0df33bc64f/contexts/order-followup",
-                "lifespanCount": 2,
-                "parameters": {
-                    "food": [
-                        "ก๋วยเตี๋ยวต้มยำกุ้งแม่น้ำ",
-                        "ชีสเค้กมะม่วง"
-                    ],
-                    "food.original": [
-                        "ก๋วยเตี๋ยวต้มยำกุ้ง",
-                        "ชีสเค้กมะม่วง"
-                    ],
-                    "amount": [
-                        1.0,
-                        1.0
-                    ],
-                    "amount.original": [
-                        "1",
-                        "1"
-                    ]
-                }
+                "name": "projects/a-typical-bot-gjcs/agent/sessions/32bed375-de15-3a93-a296-de0df33bc64f/contexts/menurecommendation-followup",
+                "lifespanCount": 2
             },
             {
                 "name": "projects/a-typical-bot-gjcs/agent/sessions/32bed375-de15-3a93-a296-de0df33bc64f/contexts/__system_counters__",
-                "lifespanCount": 1,
                 "parameters": {
                     "no-input": 0.0,
-                    "no-match": 0.0,
-                    "food": [
-                        "ก๋วยเตี๋ยวต้มยำกุ้งแม่น้ำ",
-                        "ชีสเค้กมะม่วง"
-                    ],
-                    "food.original": [
-                        "ก๋วยเตี๋ยวต้มยำกุ้ง",
-                        "ชีสเค้กมะม่วง"
-                    ],
-                    "amount": [
-                        1.0,
-                        1.0
-                    ],
-                    "amount.original": [
-                        "1",
-                        "1"
-                    ]
+                    "no-match": 0.0
                 }
             }
         ],
         "intent": {
-            "name": "projects/a-typical-bot-gjcs/agent/intents/f3d91bd3-3d45-428d-bc8a-646bf57b0c86",
-            "displayName": "Order"
+            "name": "projects/a-typical-bot-gjcs/agent/intents/4db9607d-634b-4b39-bae3-70a5104aa691",
+            "displayName": "Menu Recommendation"
         },
         "intentDetectionConfidence": 1.0,
         "languageCode": "th"
@@ -73,18 +28,18 @@
         "source": "line",
         "payload": {
             "data": {
-                "replyToken": "5ac287ce81604b7a925b4825dd19df87",
+                "replyToken": "928f7e8b8527491c870f4b710efb9125",
                 "message": {
-                    "type": "text",
-                    "text": "ก๋วยเตี๋ยวต้มยำกุ้งแม่น้ำ 1 ชีสเค้กมะม่วง 1",
-                    "id": "549105258313023892"
+                    "id": "549159080443248802",
+                    "text": "เมนู",
+                    "type": "text"
                 },
+                "type": "message",
                 "source": {
                     "type": "user",
                     "userId": "Ue9adc11b507d5d89f77f2a542ae907cf"
                 },
-                "type": "message",
-                "timestamp": "1740123542875"
+                "timestamp": "1740155623350"
             }
         }
     },
