@@ -119,14 +119,13 @@ async def webhook(request: Request):
         name = user_sessions[user_id]["name"]
         phone = user_sessions[user_id]["phone"]
 
-        storedata(user_id, user_sessions[user_id])
+        storedata(user_id, user_sessions[user_id]) # add order to database
 
-        user_sessions.pop(user_id,None) # pop out the data 
+        user_sessions.pop(user_id,None) # pop out previous data
 
         line_bot_api.reply_message(reply_token, TextSendMessage(text= f"บันทึกชื่อ: {name} เบอร์โทร : {phone} ขอบคุณสำหรับการสั่งจอง"))
 
 
-#call after details confirmed
 def storedata(id, user_id_data):
     for order in user_id_data["orders"]:
         db.store_message(id, user_id_data["name"], user_id_data["phone"], order, user_id_data["orders"].get(order))
