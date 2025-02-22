@@ -122,14 +122,11 @@ async def webhook(request: Request):
         storedata(user_id, user_sessions[user_id])
 
         user_sessions.pop(user_id,None) # pop out the data 
-        
+
         line_bot_api.reply_message(reply_token, TextSendMessage(text= f"บันทึกชื่อ: {name} เบอร์โทร : {phone} ขอบคุณสำหรับการสั่งจอง"))
 
 
+#call after details confirmed
 def storedata(id, user_id_data):
     for order in user_id_data["orders"]:
         db.store_message(id, user_id_data["name"], user_id_data["phone"], order, user_id_data["orders"].get(order))
-
-
-def getInfo(event):
-    return event.source.user_id, line_bot_api.get_profile(event.source.user_id).display_name

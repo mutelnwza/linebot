@@ -16,6 +16,8 @@ except Exception as e:
 conn.set_client_encoding('UTF8')
 cursor = conn.cursor()
 
+
+# store client's order into db
 def store_message(user_id, name, phone, order, amount):
 
     try:
@@ -28,7 +30,3 @@ def store_message(user_id, name, phone, order, amount):
     except Exception as e:
         print(f"Error: {e}")
         raise HTTPException(status_code=500, detail="Database operation error")
-
-
-def get_chat_history():
-    return
