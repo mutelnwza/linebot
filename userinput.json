@@ -1,25 +1,66 @@
 {
-    "responseId": "94648ca0-6d51-48f8-8b11-99598f4c8f9a-d25acdef",
+    "responseId": "69d964a2-3419-4b07-b4cd-592976f0fd13-d25acdef",
     "queryResult": {
-        "queryText": "เมนู",
-        "parameters": {},
+        "queryText": "ok",
+        "action": "Order.Order-yes.Order-yes-custom.GetName-yes",
+        "parameters": {
+            "music-artist": "Kase O",
+            "location": ""
+        },
         "allRequiredParamsPresent": true,
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [
+                        ""
+                    ]
+                }
+            }
+        ],
         "outputContexts": [
             {
-                "name": "projects/a-typical-bot-gjcs/agent/sessions/32bed375-de15-3a93-a296-de0df33bc64f/contexts/menurecommendation-followup",
-                "lifespanCount": 2
+                "name": "projects/a-typical-bot-gjcs/agent/sessions/32bed375-de15-3a93-a296-de0df33bc64f/contexts/getname-followup",
+                "lifespanCount": 1,
+                "parameters": {
+                    "name": "test",
+                    "name.original": "test",
+                    "phone": "0987654321",
+                    "phone.original": "0987654321",
+                    "music-artist": "Kase O",
+                    "music-artist.original": "ok",
+                    "location": "",
+                    "location.original": ""
+                }
+            },
+            {
+                "name": "projects/a-typical-bot-gjcs/agent/sessions/32bed375-de15-3a93-a296-de0df33bc64f/contexts/order-yes-followup",
+                "parameters": {
+                    "name": "test",
+                    "name.original": "test",
+                    "phone": "0987654321",
+                    "phone.original": "0987654321",
+                    "music-artist": "Kase O",
+                    "music-artist.original": "ok",
+                    "location": "",
+                    "location.original": ""
+                }
             },
             {
                 "name": "projects/a-typical-bot-gjcs/agent/sessions/32bed375-de15-3a93-a296-de0df33bc64f/contexts/__system_counters__",
                 "parameters": {
                     "no-input": 0.0,
-                    "no-match": 0.0
+                    "no-match": 0.0,
+                    "music-artist": "Kase O",
+                    "music-artist.original": "ok",
+                    "location": "",
+                    "location.original": ""
                 }
             }
         ],
         "intent": {
-            "name": "projects/a-typical-bot-gjcs/agent/intents/4db9607d-634b-4b39-bae3-70a5104aa691",
-            "displayName": "Menu Recommendation"
+            "name": "projects/a-typical-bot-gjcs/agent/intents/fe1fb27f-585e-42b4-b18f-b75161580bbf",
+            "displayName": "GetName - yes",
+            "endInteraction": true
         },
         "intentDetectionConfidence": 1.0,
         "languageCode": "th"
@@ -28,18 +69,18 @@
         "source": "line",
         "payload": {
             "data": {
-                "replyToken": "928f7e8b8527491c870f4b710efb9125",
                 "message": {
-                    "id": "549159080443248802",
-                    "text": "เมนู",
-                    "type": "text"
+                    "text": "ok",
+                    "type": "text",
+                    "id": "549227943281557761"
                 },
-                "type": "message",
                 "source": {
-                    "type": "user",
-                    "userId": "Ue9adc11b507d5d89f77f2a542ae907cf"
+                    "userId": "Ue9adc11b507d5d89f77f2a542ae907cf",
+                    "type": "user"
                 },
-                "timestamp": "1740155623350"
+                "timestamp": "1740196668612",
+                "type": "message",
+                "replyToken": "81b430a0a8194e119f7908b99734fd7e"
             }
         }
     },

@@ -78,13 +78,16 @@ async def webhook(request: Request):
     # Food Order
     elif intent_name == "Order":
         if user_id not in user_sessions:
-            user_sessions[user_id] = {"name": None, "phone": None, "orders": []}
+            user_sessions[user_id] = {"name": None, "phone": None, "orders": {}}
 
         for i in range(len(req["queryResult"]["parameters"]["food"])):
             order = req["queryResult"]["parameters"]["food"][i]
             amount = int(req["queryResult"]["parameters"]["amount"][i])
 
-            user_sessions[user_id]["orders"].append({"order": order, "amount": amount})
+            if order in user_sessions[user_id]["orders"]:
+                user_sessions[user_id]["orders"][order] = user_sessions[user_id]["orders"].get(order) + amount
+            else:
+                user_sessions[user_id]["orders"][order] = amount
 
         order_sum, reply = payload.order_confirm(user_sessions, user_id)
         line_bot_api.reply_message(reply_token, [order_sum,reply])
@@ -116,30 +119,16 @@ async def webhook(request: Request):
         name = user_sessions[user_id]["name"]
         phone = user_sessions[user_id]["phone"]
 
-        user_sessions.pop(user_id,None) # pop out the data
+        storedata(user_id, user_sessions[user_id])
 
+        user_sessions.pop(user_id,None) # pop out the data 
+        
         line_bot_api.reply_message(reply_token, TextSendMessage(text= f"บันทึกชื่อ: {name} เบอร์โทร : {phone} ขอบคุณสำหรับการสั่งจอง"))
 
 
-# Handle text messages
-# @handler.add(MessageEvent, message=TextMessage)
-# def handle_message(event):
-#     user_id, name = getInfo(event)
-#     user_message = event.message.text.lower()
-
-#     if user_message == "send img":
-#         reply = 'https://i.ibb.co/xcKgTxY/cheems.png'
-#         line_bot_api.reply_message(
-#             event.reply_token, ImageSendMessage(original_content_url=reply, preview_image_url=reply)
-#         )
-#     # text
-#     else:
-#         reply = f"You said: {user_message}"
-#         line_bot_api.reply_message(
-#             event.reply_token,TextSendMessage(text=reply))
-    
-#     # db.store_message("user", user_id, name, user_message)
-#     # db.store_message("bot",user_id, name, reply)
+def storedata(id, user_id_data):
+    for order in user_id_data["orders"]:
+        db.store_message(id, user_id_data["name"], user_id_data["phone"], order, user_id_data["orders"].get(order))
 
 
 def getInfo(event):

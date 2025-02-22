@@ -31,8 +31,11 @@ def show_menu():
 
 def order_confirm(user_sessions, user_id):
 
-    order_sum = TextSendMessage(text="ออเดอร์ของคุณคือ \n" + "\n".join([f"{item['order']} จำนวน {item['amount']}" for item in user_sessions[user_id]["orders"]]))
-
+    order_sum = TextSendMessage(
+    text="ออเดอร์ของคุณคือ \n" +
+    "\n".join([f"{item} จำนวน {user_sessions[user_id]['orders'].get(item)}"
+               for item in user_sessions[user_id]["orders"]])
+)
     
     confirm_template = TemplateSendMessage(
         alt_text="Order Confirmation",
